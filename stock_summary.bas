@@ -36,6 +36,9 @@ Sub StockSummary()
         ' Apply number formatting to cells
         ws.Range("K:K").NumberFormat = "0.00%"
         ws.Range("L:L").NumberFormat = "#,###"
+    
+        ' Auto-fit column width
+        ws.Range("J1:K1").EntireColumn.AutoFit
 
         ' ------------------------------------------------------
         ' DEFINE VARIABLES
@@ -45,7 +48,7 @@ Sub StockSummary()
         Dim Ticker As String
 
         ' Keep track of the loaction for each stock ticker in
-        ' the summary table - FROM ACTIVITY 6
+        ' the summary table
         Dim Summary_Table_Row As Integer
         ' Set first row of summary table
         Summary_Table_Row = 2
@@ -76,7 +79,6 @@ Sub StockSummary()
             ' If the next row is a different stock, then...
             If ws.Cells(i + 1, 1).Value <> ws.Cells(i, 1).Value Then
 
-                ' We are at the last row for this stock
                 ' Store the ticker symbol
                 Ticker = ws.Cells(i, 1).Value
                 
@@ -105,8 +107,7 @@ Sub StockSummary()
                 ' Total Volume:
                 ws.Cells(Summary_Table_Row, 12).Value = Total_Volume
 
-                ' We are done with this stock now,
-                ' Get everything ready for the next one:
+                ' Before continuing to next stock...
 
                 ' Add a new row to the summary table
                 Summary_Table_Row = Summary_Table_Row + 1
@@ -124,13 +125,12 @@ Sub StockSummary()
                 ' If the previous row is a different stock, then...
                 If ws.Cells(i - 1, 1).Value <> ws.Cells(i, 1).Value Then
 
-                    ' We are at the first row for this stock
                     ' Store the opening price:
                     Opening_Price = ws.Cells(i, 3).Value
                 
                 End If
 
-                ' For all rows (not just first)
+                ' For all rows:
                 ' Add stock volume to counter
                 Total_Volume = Total_Volume + ws.Cells(i, 7).Value
 
@@ -149,13 +149,13 @@ Sub StockSummary()
         ' Loop through summary table
         For i = 2 To (Summary_Table_Row - 1)
 
-            ' If yearly change is 0 or positive
+            ' If yearly change is 0 or positive...
             If ws.Cells(i, 10).Value >= 0 Then
 
                 ' Fill the cell green
                 ws.Cells(i, 10).Interior.Color = RGB(144, 174, 83)
 
-            ' If yearly change is negative
+            ' If yearly change is negative...
             Else
 
                 ' Fill the cell red
@@ -255,6 +255,7 @@ Sub StockSummary()
     ' Closes worksheet loop
     Next ws
 
+    ' Display message when script is complete
     MsgBox ("Summary Complete")
 
 End Sub
